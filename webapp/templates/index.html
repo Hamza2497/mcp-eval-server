@@ -405,7 +405,7 @@
     let currentMode = 'free';
 
     // --- Mode toggle ---
-    function setMode(mode) {
+function setMode(mode) {
         currentMode = mode;
         document.getElementById('free-input-row').style.display = mode === 'free' ? 'flex' : 'none';
         const guided = document.getElementById('guided-form');
@@ -417,6 +417,19 @@
         }
         document.getElementById('btn-free').classList.toggle('active', mode === 'free');
         document.getElementById('btn-guided').classList.toggle('active', mode === 'guided');
+
+        const examples = document.getElementById('examples');
+        if (examples) {
+            const subtitle = examples.querySelector('p');
+            const chips = examples.querySelector('.example-chips');
+            if (mode === 'guided') {
+                subtitle.textContent = 'Select an evaluation type and fill in the fields. The evaluator will handle the rest.';
+                chips.style.display = 'none';
+            } else {
+                subtitle.textContent = 'Describe what you want to evaluate in plain English, or switch to Guided mode for structured input.';
+                chips.style.display = 'flex';
+            }
+        }
     }
 
     // --- Guided fields ---
