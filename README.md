@@ -1,6 +1,7 @@
 # MCP Eval Server
 
 An MCP (Model Context Protocol) server that evaluates LLM outputs using a Gemini judge model. Connect it to Claude Desktop and use natural language to run structured evaluations on any LLM response.
+**[Try the live web app →](https://llm-eval-dmpf.onrender.com)**
 
 ## What it does
 
