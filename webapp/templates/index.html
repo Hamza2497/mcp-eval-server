@@ -23,7 +23,7 @@
             border-bottom: 1px solid #222;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
             flex-shrink: 0;
         }
 
@@ -36,6 +36,37 @@
         header span {
             font-size: 12px;
             color: #666;
+            margin-left: 10px;
+        }
+
+        .toggle {
+            display: flex;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .toggle button {
+            background: transparent;
+            color: #666;
+            border: none;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            height: auto;
+            border-radius: 0;
+        }
+
+        .toggle button.active {
+            background: #2a2a2a;
+            color: #fff;
+        }
+
+        .toggle button:hover:not(.active) {
+            color: #aaa;
+            background: transparent;
         }
 
         #chat {
@@ -87,9 +118,7 @@
             font-size: 14px;
         }
 
-        .message.assistant .content p {
-            margin-bottom: 8px;
-        }
+        .message.assistant .content p { margin-bottom: 8px; }
 
         .message.assistant .content ul,
         .message.assistant .content ol {
@@ -123,14 +152,29 @@
             font-size: 12px;
         }
 
-        .message.assistant .content strong {
-            color: #fff;
-        }
+        .message.assistant .content strong { color: #fff; }
 
         .message.assistant .content hr {
             border: none;
             border-top: 1px solid #222;
             margin: 12px 0;
+        }
+
+        .session-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #444;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .session-divider::before,
+        .session-divider::after {
+            content: '';
+            flex: 1;
+            border-top: 1px solid #222;
         }
 
         .typing {
@@ -144,10 +188,17 @@
             padding-bottom: max(12px, env(safe-area-inset-bottom));
             border-top: 1px solid #222;
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            align-items: flex-end;
             flex-shrink: 0;
             background: #0f0f0f;
+        }
+
+        /* Free text mode */
+        #free-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
         }
 
         #input {
@@ -169,7 +220,68 @@
         #input:focus { border-color: #555; }
         #input::placeholder { color: #444; }
 
-        button {
+        /* Guided mode */
+        #guided-form {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #guided-form.visible { display: flex; }
+
+        select, textarea.field, input.field {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #e0e0e0;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            width: 100%;
+        }
+
+        select:focus, textarea.field:focus, input.field:focus { border-color: #555; }
+        select option { background: #1a1a1a; }
+
+        textarea.field {
+            resize: none;
+            min-height: 72px;
+            max-height: 120px;
+            line-height: 1.5;
+        }
+
+        textarea.field::placeholder,
+        input.field::placeholder { color: #444; }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .guided-bottom {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        button.submit {
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            height: 44px;
+        }
+
+        button.submit:hover { background: #e0e0e0; }
+        button.submit:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+        /* Free text submit button */
+        #free-submit {
             background: #fff;
             color: #000;
             border: none;
@@ -183,8 +295,8 @@
             flex-shrink: 0;
         }
 
-        button:hover { background: #e0e0e0; }
-        button:disabled { background: #333; color: #666; cursor: not-allowed; }
+        #free-submit:hover { background: #e0e0e0; }
+        #free-submit:disabled { background: #333; color: #666; cursor: not-allowed; }
 
         .examples {
             display: flex;
@@ -198,17 +310,8 @@
             padding: 20px 0;
         }
 
-        .examples h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .examples p {
-            font-size: 13px;
-            color: #666;
-            margin-top: 6px;
-        }
+        .examples h2 { font-size: 20px; font-weight: 600; color: #fff; }
+        .examples p { font-size: 13px; color: #666; margin-top: 6px; }
 
         .example-chips {
             display: flex;
@@ -228,10 +331,7 @@
             transition: border-color 0.15s;
         }
 
-        .chip:hover {
-            border-color: #555;
-            color: #e0e0e0;
-        }
+        .chip:hover { border-color: #555; color: #e0e0e0; }
 
         @media (max-width: 600px) {
             #chat { padding: 12px; }
@@ -244,15 +344,21 @@
 <body>
 
 <header>
-    <h1>LLM Eval</h1>
-    <span>Powered by Gemini</span>
+    <div>
+        <h1 style="display:inline">LLM Eval</h1>
+        <span>Powered by Gemini</span>
+    </div>
+    <div class="toggle">
+        <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
+        <button id="btn-guided" onclick="setMode('guided')">Guided</button>
+    </div>
 </header>
 
 <div id="chat">
     <div class="examples" id="examples">
         <div>
             <h2>Evaluate any LLM output</h2>
-            <p>Describe what you want to evaluate in plain English. Try one of these:</p>
+            <p>Describe what you want to evaluate in plain English, or switch to Guided mode for structured input.</p>
         </div>
         <div class="example-chips">
             <div class="chip" onclick="useExample(this)">Score this output against a rubric</div>
@@ -265,8 +371,28 @@
 </div>
 
 <div id="input-area">
-    <textarea id="input" placeholder="Describe what you want to evaluate..." rows="1"></textarea>
-    <button id="send-btn" onclick="sendMessage()">Evaluate</button>
+    <!-- Free text mode -->
+    <div id="free-input-row">
+        <textarea id="input" placeholder="Describe what you want to evaluate..." rows="1"></textarea>
+        <button id="free-submit" onclick="sendFree()">Evaluate</button>
+    </div>
+
+    <!-- Guided mode -->
+    <div id="guided-form">
+        <select id="eval-type" onchange="updateGuidedFields()">
+            <option value="relevance">Relevance Check</option>
+            <option value="factual">Factual Accuracy</option>
+            <option value="rubric">Rubric Scoring</option>
+            <option value="consistency">Logical Consistency</option>
+            <option value="compare">Compare Outputs</option>
+        </select>
+
+        <div id="guided-fields" class="field-group"></div>
+
+        <div class="guided-bottom">
+            <button class="submit" id="guided-submit" onclick="sendGuided()">Evaluate</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -274,28 +400,92 @@
 
     const chat = document.getElementById('chat');
     const input = document.getElementById('input');
-    const btn = document.getElementById('send-btn');
+    let sessionCount = 0;
+    let messageCount = 0;
+    let currentMode = 'free';
 
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
+    // --- Mode toggle ---
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('free-input-row').style.display = mode === 'free' ? 'flex' : 'none';
+        const guided = document.getElementById('guided-form');
+        if (mode === 'guided') {
+            guided.classList.add('visible');
+            updateGuidedFields();
+        } else {
+            guided.classList.remove('visible');
         }
-    });
-
-    input.addEventListener('input', () => {
-        input.style.height = 'auto';
-        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-    });
-
-    function useExample(el) {
-        input.value = el.textContent;
-        input.focus();
+        document.getElementById('btn-free').classList.toggle('active', mode === 'free');
+        document.getElementById('btn-guided').classList.toggle('active', mode === 'guided');
     }
 
+    // --- Guided fields ---
+    const fields = {
+        relevance: `
+            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
+            <input class="field" id="f-query" placeholder="User query the output should address...">
+        `,
+        factual: `
+            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
+            <textarea class="field" id="f-facts" placeholder="Known facts (one per line)..." rows="3"></textarea>
+        `,
+        rubric: `
+            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
+            <input class="field" id="f-goal" placeholder="Task goal (e.g. Explain what a for loop does)">
+            <textarea class="field" id="f-criteria" placeholder="Criteria (one per line, e.g. accuracy: Is it correct?)" rows="3"></textarea>
+            <input class="field" id="f-passing" placeholder="Minimum passing score (e.g. 0.7)" type="number" min="0" max="1" step="0.1" value="0.7">
+        `,
+        consistency: `
+            <textarea class="field" id="f-output" placeholder="LLM output to check for contradictions..." rows="4"></textarea>
+        `,
+        compare: `
+            <textarea class="field" id="f-a" placeholder="Response A..." rows="3"></textarea>
+            <textarea class="field" id="f-b" placeholder="Response B..." rows="3"></textarea>
+            <input class="field" id="f-query" placeholder="The user query both responses are answering...">
+        `
+    };
+
+    function updateGuidedFields() {
+        const type = document.getElementById('eval-type').value;
+        document.getElementById('guided-fields').innerHTML = fields[type];
+    }
+
+    function buildGuidedMessage() {
+        const type = document.getElementById('eval-type').value;
+        const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+        switch (type) {
+            case 'relevance':
+                return `Check if this output is relevant to the query.\n\nQuery: ${get('f-query')}\n\nOutput: ${get('f-output')}`;
+            case 'factual':
+                const facts = get('f-facts').split('\n').filter(f => f.trim()).map(f => `- ${f}`).join('\n');
+                return `Check the factual accuracy of this output against the following known facts.\n\nKnown facts:\n${facts}\n\nOutput: ${get('f-output')}`;
+            case 'rubric':
+                const criteria = get('f-criteria').split('\n').filter(c => c.trim()).map(c => `- ${c}`).join('\n');
+                return `Score this output against the rubric.\n\nTask goal: ${get('f-goal')}\n\nCriteria:\n${criteria}\n\nMinimum passing score: ${get('f-passing')}\n\nOutput: ${get('f-output')}`;
+            case 'consistency':
+                return `Check if this output contradicts itself.\n\nOutput: ${get('f-output')}`;
+            case 'compare':
+                return `Compare these two responses and tell me which is better.\n\nQuery: ${get('f-query')}\n\nResponse A: ${get('f-a')}\n\nResponse B: ${get('f-b')}`;
+        }
+    }
+
+    // --- Session divider ---
+    function addSessionDivider() {
+        sessionCount++;
+        const div = document.createElement('div');
+        div.className = 'session-divider';
+        div.textContent = `Session ${sessionCount}`;
+        chat.appendChild(div);
+    }
+
+    // --- Messages ---
     function addMessage(text, role) {
         const examples = document.getElementById('examples');
         if (examples) examples.remove();
+
+        if (messageCount === 0) addSessionDivider();
+        messageCount++;
 
         const div = document.createElement('div');
         div.className = `message ${role}`;
@@ -316,7 +506,6 @@
 
         chat.appendChild(div);
         chat.scrollTop = chat.scrollHeight;
-        return div;
     }
 
     function addTyping() {
@@ -333,22 +522,16 @@
         if (t) t.remove();
     }
 
-    async function sendMessage() {
-        const text = input.value.trim();
-        if (!text) return;
-
-        input.value = '';
-        input.style.height = 'auto';
-        btn.disabled = true;
-
-        addMessage(text, 'user');
+    async function callEvaluate(message, displayText) {
+        addMessage(displayText || message, 'user');
         addTyping();
+        setSubmitDisabled(true);
 
         try {
             const res = await fetch('/evaluate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify({ message })
             });
             const data = await res.json();
             removeTyping();
@@ -358,9 +541,56 @@
             addMessage('Something went wrong. Please try again.', 'assistant');
         }
 
-        btn.disabled = false;
+        setSubmitDisabled(false);
+    }
+
+    function setSubmitDisabled(disabled) {
+        document.getElementById('free-submit').disabled = disabled;
+        document.getElementById('guided-submit').disabled = disabled;
+    }
+
+    // --- Free text ---
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFree(); }
+    });
+
+    input.addEventListener('input', () => {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    });
+
+    function useExample(el) {
+        input.value = el.textContent;
+        setMode('free');
         input.focus();
     }
+
+    function sendFree() {
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        input.style.height = 'auto';
+        callEvaluate(text);
+    }
+
+    // --- Guided ---
+    function sendGuided() {
+        const message = buildGuidedMessage();
+        const type = document.getElementById('eval-type').value;
+        const labels = {
+            relevance: 'Relevance Check',
+            factual: 'Factual Accuracy',
+            rubric: 'Rubric Scoring',
+            consistency: 'Logical Consistency',
+            compare: 'Compare Outputs'
+        };
+        if (!message || message.includes('undefined')) return;
+        callEvaluate(message, `[${labels[type]}]`);
+    }
+
+    // Init
+    setMode('free');
+    updateGuidedFields();
 </script>
 
 </body>
