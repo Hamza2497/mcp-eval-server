@@ -11,7 +11,18 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 mcp = FastMCP("mcp-eval-server")
 
 def _call_judge(prompt: str) -> dict:
-    """Call Gemini and parse the JSON response. Raises ValueError on failure."""
+    """Send a prompt to the Gemini judge model and parse the JSON response.
+    
+    Args:
+        prompt: The fully constructed evaluation prompt to send to Gemini.
+        
+    Returns:
+        A dictionary parsed from Gemini's JSON response.
+        
+    Raises:
+        ValueError: If the response cannot be parsed as JSON.
+        Exception: If the Gemini API call fails.
+    """
     response = client.models.generate_content(
         model="gemini-3.1-flash-lite",
         contents=prompt
@@ -19,8 +30,16 @@ def _call_judge(prompt: str) -> dict:
     text = response.text.strip().removeprefix("```json").removesuffix("```").strip()
     return json.loads(text)
 
+
 def _error_result(message: str) -> EvaluationResult:
-    """Return a safe fallback EvaluationResult when something goes wrong."""
+    """Return a safe fallback EvaluationResult when evaluation fails.
+    
+    Args:
+        message: A description of what went wrong.
+        
+    Returns:
+        An EvaluationResult with score 0.0, passed=False, and needs_human_review=True.
+    """
     return EvaluationResult(
         overall_score=0.0,
         passed=False,
