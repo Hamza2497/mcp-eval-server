@@ -25,7 +25,7 @@ Each tool returns a structured result with an overall score, per-criterion score
 ### Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/mcp-eval-server.git
+git clone https://github.com/Hamza2497/mcp-eval-server.git
 cd mcp-eval-server
 python -m venv .venv
 source .venv/bin/activate
