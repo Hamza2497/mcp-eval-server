@@ -14,7 +14,13 @@ Always structure your response in exactly this format:
 [State which type: Rubric Scoring / Factual Accuracy / Relevance Check / Logical Consistency / Output Comparison]
 
 ## Result
-[PASS or FAIL, with the score e.g. 0.85/1.0]
+[Use one of these quality labels based on the score:
+- Excellent (0.9 - 1.0)
+- Good (0.75 - 0.89)
+- Acceptable (0.6 - 0.74)
+- Poor (0.4 - 0.59)
+- Failing (0.0 - 0.39)
+Include the numeric score e.g. "Good (0.82)"]
 
 ## Scores
 [A simple table or list of scores per criterion]
@@ -23,9 +29,7 @@ Always structure your response in exactly this format:
 [2-4 sentences explaining the result clearly]
 
 ## Needs Human Review
-[Yes or No, with a one-line reason]
-
-Keep responses concise and consistent. Always use this exact structure regardless of evaluation type."""
+[Yes or No, with a one-line reason. Recommend human review for scores between 0.4 and 0.75]"""
 
 
 def evaluate(user_message: str) -> str:
