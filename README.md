@@ -12,6 +12,7 @@ LLM outputs are hard to evaluate at scale. This server exposes four evaluation t
 - **`evaluate_factual_accuracy`** — Check whether an output contradicts a set of known facts
 - **`check_relevance`** — Check whether an output actually addresses the user's query
 - **`check_logical_consistency`** — Detect internal contradictions in an output
+- **`compare_outputs`** — Compare two LLM responses to the same query and determine which is better and why
 
 Each tool returns a structured result with an overall score, per-criterion scores, pass/fail, feedback, and a flag for outputs that need human review.
 
