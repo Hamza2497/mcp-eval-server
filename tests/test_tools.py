@@ -4,6 +4,7 @@ from mcp_eval_server.tools import (
     evaluate_factual_accuracy,
     check_relevance,
     check_logical_consistency,
+    compare_outputs,
 )
 from mcp_eval_server.models import Rubric, RubricCriteria
 
@@ -120,3 +121,39 @@ def test_logical_consistency_empty_output():
     result = check_logical_consistency("")
     assert result.passed is False
     assert "empty" in result.feedback.lower()
+
+    # --- compare_outputs ---
+
+def test_compare_outputs_picks_better_response():
+    result = compare_outputs(
+        output_a="A dictionary in Python is a collection of key-value pairs. It is mutable, unordered, and does not allow duplicate keys.",
+        output_b="A dictionary is a thing in Python.",
+        user_query="What is a Python dictionary?"
+    )
+    assert result["winner"] == "A"
+    assert result["score_a"] > result["score_b"]
+
+def test_compare_outputs_returns_all_fields():
+    result = compare_outputs(
+        output_a="Python is a high-level, interpreted programming language.",
+        output_b="Python is a snake.",
+        user_query="What is Python?"
+    )
+    assert "winner" in result
+    assert "score_a" in result
+    assert "score_b" in result
+    assert "reasoning" in result
+    assert "strengths_a" in result
+    assert "strengths_b" in result
+
+def test_compare_outputs_empty_output_a():
+    result = compare_outputs("", "Some response", "Some query")
+    assert "error" in result
+
+def test_compare_outputs_empty_output_b():
+    result = compare_outputs("Some response", "", "Some query")
+    assert "error" in result
+
+def test_compare_outputs_empty_query():
+    result = compare_outputs("Response A", "Response B", "")
+    assert "error" in result
