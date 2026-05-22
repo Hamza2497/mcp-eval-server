@@ -348,9 +348,12 @@
         <h1 style="display:inline">LLM Eval</h1>
         <span>Powered by Gemini</span>
     </div>
-    <div class="toggle">
-        <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
-        <button id="btn-guided" onclick="setMode('guided')">Guided</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+        <button id="btn-new-session" onclick="newSession()" style="background:transparent; color:#555; border:1px solid #2a2a2a; border-radius:8px; padding:6px 12px; font-size:12px; height:auto; cursor:pointer;">New session</button>
+        <div class="toggle">
+            <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
+            <button id="btn-guided" onclick="setMode('guided')">Guided</button>
+        </div>
     </div>
 </header>
 
@@ -491,6 +494,12 @@ function setMode(mode) {
         div.textContent = `Session ${sessionCount}`;
         chat.appendChild(div);
     }
+
+    function newSession() {
+    if (messageCount === 0) return;
+    addSessionDivider();
+    messageCount = 0;
+}
 
     // --- Messages ---
     function addMessage(text, role) {
