@@ -154,3 +154,40 @@ Return only the JSON object, no other text."""
         return EvaluationResult(**result)
     except Exception as e:
         return _error_result(str(e))
+
+@mcp.tool()
+def compare_outputs(output_a: str, output_b: str, user_query: str) -> dict:
+    """Compare two LLM outputs for the same query and determine which is better."""
+    if not output_a.strip():
+        return {"error": "output_a cannot be empty."}
+    if not output_b.strip():
+        return {"error": "output_b cannot be empty."}
+    if not user_query.strip():
+        return {"error": "user_query cannot be empty."}
+
+    prompt = f"""You are an LLM output evaluator. Compare two responses to the same user query and determine which is better.
+
+User query:
+{user_query}
+
+Response A:
+{output_a}
+
+Response B:
+{output_b}
+
+Return a JSON object with exactly these fields:
+- winner: string, either "A", "B", or "tie"
+- score_a: float between 0.0 and 1.0
+- score_b: float between 0.0 and 1.0
+- reasoning: string explaining why one response is better, or why it's a tie
+- strengths_a: string describing what Response A does well
+- strengths_b: string describing what Response B does well
+
+Return only the JSON object, no other text."""
+
+    try:
+        result = _call_judge(prompt)
+        return result
+    except Exception as e:
+        return {"error": f"Evaluation failed: {str(e)}"}
