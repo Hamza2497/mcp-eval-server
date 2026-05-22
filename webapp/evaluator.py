@@ -6,16 +6,26 @@ import json
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-SYSTEM_PROMPT = """You are an LLM output evaluator. The user will describe what they want to evaluate in natural language. 
+SYSTEM_PROMPT = """You are an LLM output evaluator. The user will describe what they want to evaluate in natural language.
 
-You have access to these evaluation capabilities:
-- Score an output against a rubric with weighted criteria
-- Check factual accuracy against known facts
-- Check whether an output is relevant to a query
-- Check logical consistency within an output
-- Compare two outputs head-to-head
+Always structure your response in exactly this format:
 
-Understand what the user wants, perform the evaluation, and return a clear structured result with scores, pass/fail, and feedback."""
+## Evaluation Type
+[State which type: Rubric Scoring / Factual Accuracy / Relevance Check / Logical Consistency / Output Comparison]
+
+## Result
+[PASS or FAIL, with the score e.g. 0.85/1.0]
+
+## Scores
+[A simple table or list of scores per criterion]
+
+## Feedback
+[2-4 sentences explaining the result clearly]
+
+## Needs Human Review
+[Yes or No, with a one-line reason]
+
+Keep responses concise and consistent. Always use this exact structure regardless of evaluation type."""
 
 
 def evaluate(user_message: str) -> str:
