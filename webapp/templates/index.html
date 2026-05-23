@@ -131,6 +131,7 @@
             line-height: 1.4;
             overflow: hidden;
             display: -webkit-box;
+            line-clamp: 2;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
@@ -643,8 +644,30 @@
 
     function newSession() {
         if (messageCount === 0) return;
-        addSessionDivider();
+        // Clear the chat screen
+        chat.innerHTML = '';
+        sessionCount = 0;
         messageCount = 0;
+        // Re-add the examples block
+        const examples = document.createElement('div');
+        examples.className = 'examples';
+        examples.id = 'examples';
+        examples.innerHTML = `
+            <div>
+                <h2>Evaluate any LLM output</h2>
+                <p id="examples-subtitle">Describe what you want to evaluate in plain English, or switch to Guided mode for structured input.</p>
+            </div>
+            <div class="example-chips" id="example-chips">
+                <div class="chip" onclick="useExample(this)">Score this output against a rubric</div>
+                <div class="chip" onclick="useExample(this)">Check if this response is factually accurate</div>
+                <div class="chip" onclick="useExample(this)">Is this output relevant to the question?</div>
+                <div class="chip" onclick="useExample(this)">Does this response contradict itself?</div>
+                <div class="chip" onclick="useExample(this)">Compare these two responses and tell me which is better</div>
+            </div>
+        `;
+        chat.appendChild(examples);
+        // Re-apply current mode subtitles
+        setMode(currentMode);
     }
 
     // --- Messages ---
