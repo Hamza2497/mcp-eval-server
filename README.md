@@ -1,5 +1,7 @@
 # MCP Eval Server
 
+> **Current version: v1.0** — [Changelog](#changelog)
+
 An LLM output evaluation tool with two ways to use it — a live web app you can try instantly, or a Claude Desktop plugin you can install locally.
 
 **[Try the live web app →](https://llm-eval-dmpf.onrender.com)**
@@ -100,3 +102,16 @@ Then open `http://localhost:8000`.
 ```bash
 pytest tests/ -v
 ```
+
+---
+
+## Changelog
+
+### v1.0 — 2026-05-23
+- 5 evaluation tools: score against rubric, factual accuracy, relevance, logical consistency, compare outputs
+- Claude Desktop plugin (Claude as judge, no API key required)
+- Live web app with chat-style interface (Gemini as judge)
+- Guided mode with structured input fields per evaluation type
+- Free text mode with example prompts
+- Markdown rendering, graduated scoring, session dividers
+- 19 passing tests
