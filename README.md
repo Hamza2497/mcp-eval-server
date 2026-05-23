@@ -1,11 +1,24 @@
 # MCP Eval Server
 
-An MCP (Model Context Protocol) server that evaluates LLM outputs using a Gemini judge model. Connect it to Claude Desktop and use natural language to run structured evaluations on any LLM response.
+An LLM output evaluation tool with two ways to use it — a live web app you can try instantly, or a Claude Desktop plugin you can install locally.
+
 **[Try the live web app →](https://llm-eval-dmpf.onrender.com)**
+
+---
 
 ## What it does
 
-LLM outputs are hard to evaluate at scale. This server exposes four evaluation tools that use Gemini as a judge model to score outputs against rubrics, check factual accuracy, assess relevance, and detect logical contradictions — all callable directly from Claude Desktop.
+LLM outputs are hard to evaluate at scale. This project exposes five evaluation tools that use a judge model to score outputs against rubrics, check factual accuracy, assess relevance, detect logical contradictions, and compare responses head-to-head.
+
+## Two ways to use it
+
+### 1. Web app (no setup required)
+Visit **[llm-eval-dmpf.onrender.com](https://llm-eval-dmpf.onrender.com)** and describe what you want to evaluate in plain English, or use Guided mode to fill in structured fields. Powered by Gemini.
+
+### 2. Claude Desktop plugin (local, no API key needed)
+Install the MCP server and call the evaluation tools directly from any Claude Desktop conversation. Claude itself acts as the judge — no external API key required.
+
+---
 
 ## Tools
 
@@ -15,13 +28,12 @@ LLM outputs are hard to evaluate at scale. This server exposes four evaluation t
 - **`check_logical_consistency`** — Detect internal contradictions in an output
 - **`compare_outputs`** — Compare two LLM responses to the same query and determine which is better and why
 
-Each tool returns a structured result with an overall score, per-criterion scores, pass/fail, feedback, and a flag for outputs that need human review.
+---
 
-## Setup
+## Claude Desktop plugin setup
 
 ### Prerequisites
 - Python 3.12+
-- A [Google AI Studio](https://aistudio.google.com) API key
 - [Claude Desktop](https://claude.ai/download)
 
 ### Install
@@ -34,11 +46,6 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-### Configure API key
-
-Create a `.env` file in the project root:
-GEMINI_API_KEY=your_api_key_here
-
 ### Connect to Claude Desktop
 
 Add this to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
@@ -48,33 +55,48 @@ Add this to your `~/Library/Application Support/Claude/claude_desktop_config.jso
   "mcpServers": {
     "mcp-eval-server": {
       "command": "/path/to/mcp-eval-server/.venv/bin/python",
-      "args": ["-m", "mcp_eval_server"],
-      "env": {
-        "GEMINI_API_KEY": "your_api_key_here"
-      }
+      "args": ["-m", "mcp_eval_server"]
     }
   }
 }
 ```
 
-Restart Claude Desktop. The server will appear in your connectors list.
+Replace `/path/to/mcp-eval-server/` with the actual path where you cloned the repo. Restart Claude Desktop — the server will appear in your connectors list.
 
-## Example
+### Example
 
 Ask Claude Desktop:
 
 > Use score_against_rubric to evaluate "A for loop lets you repeat a block of code for each item in a list." against a rubric with task goal "Explain what a for loop does", criteria: accuracy (weight 0.8) and clarity (weight 0.6), min passing score 0.7.
 
-Returns:
-Overall Score: 0.775
-Passed: Yes
-Accuracy: 0.75 — correct but incomplete (works on any iterable, not just lists)
-Clarity: 0.8 — easy to understand for a beginner
-Needs Human Review: No
+---
+
+## Running the web app locally
+
+```bash
+pip install -e .
+cp .env.example .env  # add your GEMINI_API_KEY
+uvicorn webapp.main:app --reload
+```
+
+Then open `http://localhost:8000`.
+
+---
 
 ## Tech stack
 
 - [FastMCP](https://github.com/jlowin/fastmcp) — MCP server framework
-- [Google Gemini](https://ai.google.dev) (`gemini-3.1-flash-lite`) — judge model
+- [FastAPI](https://fastapi.tiangolo.com) + Jinja2 — web app backend
+- [Google Gemini](https://ai.google.dev) (`gemini-3.1-flash-lite`) — judge model for web app
+- Claude — judge model for the Desktop plugin (no API key needed)
 - [Pydantic](https://docs.pydantic.dev) — typed data validation
 - Python 3.12
+- Deployed on [Render](https://render.com)
+
+---
+
+## Running tests
+
+```bash
+pytest tests/ -v
+```
