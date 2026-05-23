@@ -7,12 +7,17 @@ from .evaluator import evaluate
 
 load_dotenv()
 
-app = FastAPI(title="MCP Eval Server")
+app = FastAPI(title="LLM Eval")
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
+async def landing(request: Request):
+    return templates.TemplateResponse(request, "landing.html")
+
+
+@app.get("/app", response_class=HTMLResponse)
+async def chat(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 

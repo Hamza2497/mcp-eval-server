@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Eval</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        nav {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        nav .logo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        nav .logo span { color: #555; font-weight: 400; margin-left: 8px; font-size: 13px; }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.15s;
+        }
+
+        nav a:hover { color: #e0e0e0; }
+
+        .hero {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .btn-primary:hover { background: #e0e0e0; }
+
+        .btn-secondary {
+            background: transparent;
+            color: #aaa;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .btn-secondary:hover { border-color: #555; color: #e0e0e0; }
+
+        /* Sample outputs */
+        .samples {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
+        }
+
+        .samples h2 {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 32px;
+        }
+
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .sample-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .sample-card .type {
+            font-size: 11px;
+            font-weight: 600;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .sample-card .query {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 14px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .sample-card .result {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sample-card .score {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sample-card .verdict {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .verdict.good { background: #0d2b0d; color: #4caf50; }
+        .verdict.fail { background: #2b0d0d; color: #f44336; }
+        .verdict.acceptable { background: #2b2200; color: #ff9800; }
+
+        .sample-card .feedback {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Tools section */
+        .tools {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 40px 100px;
+        }
+
+        .tools h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 32px;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-item {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .tool-item .icon {
+            font-size: 18px;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .tool-item .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            font-family: monospace;
+        }
+
+        .tool-item .desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        footer {
+            border-top: 1px solid #1a1a1a;
+            padding: 24px 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #444;
+        }
+
+        footer a { color: #555; text-decoration: none; }
+        footer a:hover { color: #aaa; }
+
+        @media (max-width: 600px) {
+            nav { padding: 16px 20px; }
+            .hero { padding: 60px 20px 40px; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 15px; }
+            .samples, .tools { padding-left: 20px; padding-right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" style="text-decoration:none;"><div class="logo">LLM Eval <span>v1.0</span></div></a>
+    <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub →</a>
+</nav>
+
+<div class="hero">
+    <div class="badge">Open source · Powered by Gemini</div>
+    <h1>Evaluate LLM outputs<br>in plain English</h1>
+    <p>Score outputs against rubrics, check factual accuracy, detect contradictions, and compare responses — no setup required.</p>
+    <div class="cta-group">
+        <a href="/app" class="btn-primary">Start evaluating →</a>
+        <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank" class="btn-secondary">View on GitHub</a>
+    </div>
+</div>
+
+<div class="samples">
+    <h2>Sample evaluations</h2>
+    <div class="sample-grid">
+        <div class="sample-card">
+            <div class="type">Rubric Scoring</div>
+            <div class="query">"A for loop repeats code for each item in an iterable."</div>
+            <div class="result">
+                <div class="score">0.78</div>
+                <div class="verdict good">Good</div>
+            </div>
+            <div class="feedback">Accurate and clear, but misses edge cases like range() and enumerate().</div>
+        </div>
+        <div class="sample-card">
+            <div class="type">Logical Consistency</div>
+            <div class="query">"All mammals are warm-blooded. Whales are mammals. Therefore whales are cold-blooded."</div>
+            <div class="result">
+                <div class="score">0.0</div>
+                <div class="verdict fail">Failing</div>
+            </div>
+            <div class="feedback">Direct contradiction between premise and conclusion.</div>
+        </div>
+        <div class="sample-card">
+            <div class="type">Factual Accuracy</div>
+            <div class="query">"The Earth orbits the Sun every 365 days."</div>
+            <div class="result">
+                <div class="score">0.80</div>
+                <div class="verdict acceptable">Acceptable</div>
+            </div>
+            <div class="feedback">Correct but imprecise — a full orbit takes 365.25 days.</div>
+        </div>
+    </div>
+</div>
+
+<div class="tools">
+    <h2>Five evaluation tools</h2>
+    <div class="tool-list">
+        <div class="tool-item">
+            <div class="icon">📋</div>
+            <div>
+                <div class="name">score_against_rubric</div>
+                <div class="desc">Score an output against a custom rubric with weighted criteria and a passing threshold.</div>
+            </div>
+        </div>
+        <div class="tool-item">
+            <div class="icon">✅</div>
+            <div>
+                <div class="name">evaluate_factual_accuracy</div>
+                <div class="desc">Check whether an output contradicts or misrepresents a set of known facts.</div>
+            </div>
+        </div>
+        <div class="tool-item">
+            <div class="icon">🎯</div>
+            <div>
+                <div class="name">check_relevance</div>
+                <div class="desc">Check whether an output actually addresses what the user asked.</div>
+            </div>
+        </div>
+        <div class="tool-item">
+            <div class="icon">🔍</div>
+            <div>
+                <div class="name">check_logical_consistency</div>
+                <div class="desc">Detect internal contradictions within an output.</div>
+            </div>
+        </div>
+        <div class="tool-item">
+            <div class="icon">⚖️</div>
+            <div>
+                <div class="name">compare_outputs</div>
+                <div class="desc">Compare two LLM responses to the same query and determine which is better and why.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Built by <a href="https://github.com/Hamza2497" target="_blank">Hamzah</a> ·
+    <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub</a>
+</footer>
+
+</body>
+</html>
