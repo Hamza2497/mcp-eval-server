@@ -27,17 +27,12 @@
             flex-shrink: 0;
         }
 
-        header h1 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
 
-        header span {
-            font-size: 12px;
-            color: #666;
-            margin-left: 10px;
-        }
+        header h1 { font-size: 15px; font-weight: 600; color: #fff; }
+        header span { font-size: 12px; color: #666; }
+
+        .header-right { display: flex; gap: 8px; align-items: center; }
 
         .toggle {
             display: flex;
@@ -59,14 +54,107 @@
             border-radius: 0;
         }
 
-        .toggle button.active {
-            background: #2a2a2a;
-            color: #fff;
+        .toggle button.active { background: #2a2a2a; color: #fff; }
+        .toggle button:hover:not(.active) { color: #aaa; background: transparent; }
+
+        /* Main layout */
+        .main {
+            flex: 1;
+            display: flex;
+            min-height: 0;
         }
 
-        .toggle button:hover:not(.active) {
-            color: #aaa;
-            background: transparent;
+        /* History sidebar */
+        #history-panel {
+            width: 220px;
+            border-right: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        #history-panel.hidden { display: none; }
+
+        .history-header {
+            padding: 12px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-clear {
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            height: auto;
+        }
+
+        .history-clear:hover { color: #666; background: none; }
+
+        #history-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .history-item {
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .history-item:hover { background: #1a1a1a; }
+
+        .history-item .h-type {
+            font-size: 10px;
+            font-weight: 600;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 3px;
+        }
+
+        .history-item .h-preview {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.4;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .history-item .h-time {
+            font-size: 10px;
+            color: #333;
+            margin-top: 4px;
+        }
+
+        .history-empty {
+            padding: 20px 14px;
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Chat area */
+        #chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
         }
 
         #chat {
@@ -96,10 +184,7 @@
             max-width: min(720px, 85%);
         }
 
-        .message.assistant {
-            align-self: flex-start;
-            color: #e0e0e0;
-        }
+        .message.assistant { align-self: flex-start; color: #e0e0e0; }
 
         .message.assistant .label {
             font-size: 11px;
@@ -140,11 +225,7 @@
             text-align: left;
         }
 
-        .message.assistant .content th {
-            background: #1a1a1a;
-            color: #aaa;
-        }
-
+        .message.assistant .content th { background: #1a1a1a; color: #aaa; }
         .message.assistant .content code {
             background: #1a1a1a;
             padding: 2px 6px;
@@ -177,11 +258,7 @@
             border-top: 1px solid #222;
         }
 
-        .typing {
-            align-self: flex-start;
-            color: #555;
-            font-size: 13px;
-        }
+        .typing { align-self: flex-start; color: #555; font-size: 13px; }
 
         #input-area {
             padding: 12px 20px;
@@ -194,12 +271,7 @@
             background: #0f0f0f;
         }
 
-        /* Free text mode */
-        #free-input-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
+        #free-input-row { display: flex; gap: 10px; align-items: flex-end; }
 
         #input {
             flex: 1;
@@ -220,13 +292,7 @@
         #input:focus { border-color: #555; }
         #input::placeholder { color: #444; }
 
-        /* Guided mode */
-        #guided-form {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        #guided-form { display: none; flex-direction: column; gap: 10px; }
         #guided-form.visible { display: flex; }
 
         select, textarea.field, input.field {
@@ -251,19 +317,9 @@
             line-height: 1.5;
         }
 
-        textarea.field::placeholder,
-        input.field::placeholder { color: #444; }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .guided-bottom {
-            display: flex;
-            justify-content: flex-end;
-        }
+        textarea.field::placeholder, input.field::placeholder { color: #444; }
+        .field-group { display: flex; flex-direction: column; gap: 8px; }
+        .guided-bottom { display: flex; justify-content: flex-end; }
 
         button.submit {
             background: #fff;
@@ -280,7 +336,6 @@
         button.submit:hover { background: #e0e0e0; }
         button.submit:disabled { background: #333; color: #666; cursor: not-allowed; }
 
-        /* Free text submit button */
         #free-submit {
             background: #fff;
             color: #000;
@@ -333,7 +388,35 @@
 
         .chip:hover { border-color: #555; color: #e0e0e0; }
 
+        #btn-history {
+            background: transparent;
+            color: #555;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        #btn-history:hover { color: #aaa; background: transparent; border-color: #444; }
+        #btn-history.active { color: #e0e0e0; border-color: #444; background: #1a1a1a; }
+
+        #btn-new-session {
+            background: transparent;
+            color: #555;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        #btn-new-session:hover { color: #aaa; background: transparent; }
+
         @media (max-width: 600px) {
+            #history-panel { display: none !important; }
             #chat { padding: 12px; }
             #input-area { padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
             .examples h2 { font-size: 17px; }
@@ -344,12 +427,13 @@
 <body>
 
 <header>
-    <div>
-        <a href="/" style="text-decoration:none;color:inherit;"><h1 style="display:inline">LLM Eval</h1></a>
+    <div class="header-left">
+        <a href="/" style="text-decoration:none;color:inherit;"><h1>LLM Eval</h1></a>
         <span>Powered by Gemini</span>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-        <button id="btn-new-session" onclick="newSession()" style="background:transparent; color:#555; border:1px solid #2a2a2a; border-radius:8px; padding:6px 12px; font-size:12px; height:auto; cursor:pointer;">New session</button>
+    <div class="header-right">
+        <button id="btn-new-session" onclick="newSession()">New session</button>
+        <button id="btn-history" onclick="toggleHistory()">History</button>
         <div class="toggle">
             <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
             <button id="btn-guided" onclick="setMode('guided')">Guided</button>
@@ -357,43 +441,52 @@
     </div>
 </header>
 
-<div id="chat">
-    <div class="examples" id="examples">
-        <div>
-            <h2>Evaluate any LLM output</h2>
-            <p>Describe what you want to evaluate in plain English, or switch to Guided mode for structured input.</p>
+<div class="main">
+    <!-- History sidebar -->
+    <div id="history-panel" class="hidden">
+        <div class="history-header">
+            History
+            <button class="history-clear" onclick="clearHistory()">Clear</button>
         </div>
-        <div class="example-chips">
-            <div class="chip" onclick="useExample(this)">Score this output against a rubric</div>
-            <div class="chip" onclick="useExample(this)">Check if this response is factually accurate</div>
-            <div class="chip" onclick="useExample(this)">Is this output relevant to the question?</div>
-            <div class="chip" onclick="useExample(this)">Does this response contradict itself?</div>
-            <div class="chip" onclick="useExample(this)">Compare these two responses and tell me which is better</div>
-        </div>
-    </div>
-</div>
-
-<div id="input-area">
-    <!-- Free text mode -->
-    <div id="free-input-row">
-        <textarea id="input" placeholder="Describe what you want to evaluate..." rows="1"></textarea>
-        <button id="free-submit" onclick="sendFree()">Evaluate</button>
+        <div id="history-list"></div>
     </div>
 
-    <!-- Guided mode -->
-    <div id="guided-form">
-        <select id="eval-type" onchange="updateGuidedFields()">
-            <option value="relevance">Relevance Check</option>
-            <option value="factual">Factual Accuracy</option>
-            <option value="rubric">Rubric Scoring</option>
-            <option value="consistency">Logical Consistency</option>
-            <option value="compare">Compare Outputs</option>
-        </select>
+    <!-- Chat -->
+    <div id="chat-area">
+        <div id="chat">
+            <div class="examples" id="examples">
+                <div>
+                    <h2>Evaluate any LLM output</h2>
+                    <p id="examples-subtitle">Describe what you want to evaluate in plain English, or switch to Guided mode for structured input.</p>
+                </div>
+                <div class="example-chips" id="example-chips">
+                    <div class="chip" onclick="useExample(this)">Score this output against a rubric</div>
+                    <div class="chip" onclick="useExample(this)">Check if this response is factually accurate</div>
+                    <div class="chip" onclick="useExample(this)">Is this output relevant to the question?</div>
+                    <div class="chip" onclick="useExample(this)">Does this response contradict itself?</div>
+                    <div class="chip" onclick="useExample(this)">Compare these two responses and tell me which is better</div>
+                </div>
+            </div>
+        </div>
 
-        <div id="guided-fields" class="field-group"></div>
-
-        <div class="guided-bottom">
-            <button class="submit" id="guided-submit" onclick="sendGuided()">Evaluate</button>
+        <div id="input-area">
+            <div id="free-input-row">
+                <textarea id="input" placeholder="Describe what you want to evaluate..." rows="1"></textarea>
+                <button id="free-submit" onclick="sendFree()">Evaluate</button>
+            </div>
+            <div id="guided-form">
+                <select id="eval-type" onchange="updateGuidedFields()">
+                    <option value="relevance">Relevance Check</option>
+                    <option value="factual">Factual Accuracy</option>
+                    <option value="rubric">Rubric Scoring</option>
+                    <option value="consistency">Logical Consistency</option>
+                    <option value="compare">Compare Outputs</option>
+                </select>
+                <div id="guided-fields" class="field-group"></div>
+                <div class="guided-bottom">
+                    <button class="submit" id="guided-submit" onclick="sendGuided()">Evaluate</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -406,25 +499,82 @@
     let sessionCount = 0;
     let messageCount = 0;
     let currentMode = 'free';
+    let historyVisible = false;
+
+    // --- localStorage history ---
+    const HISTORY_KEY = 'llmeval_history';
+
+    function loadHistory() {
+        try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+        catch { return []; }
+    }
+
+    function saveToHistory(userMsg, assistantMsg) {
+        const history = loadHistory();
+        history.unshift({
+            id: Date.now(),
+            user: userMsg,
+            assistant: assistantMsg,
+            time: new Date().toLocaleString()
+        });
+        if (history.length > 50) history.pop();
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        renderHistoryList();
+    }
+
+    function renderHistoryList() {
+        const list = document.getElementById('history-list');
+        const history = loadHistory();
+        if (history.length === 0) {
+            list.innerHTML = '<div class="history-empty">No evaluations yet.<br>Your history will appear here.</div>';
+            return;
+        }
+        list.innerHTML = history.map(item => `
+            <div class="history-item" onclick="loadHistoryItem(${item.id})">
+                <div class="h-preview">${item.user.replace(/</g, '&lt;').substring(0, 80)}${item.user.length > 80 ? '…' : ''}</div>
+                <div class="h-time">${item.time}</div>
+            </div>
+        `).join('');
+    }
+
+    function loadHistoryItem(id) {
+        const history = loadHistory();
+        const item = history.find(h => h.id === id);
+        if (!item) return;
+        const examples = document.getElementById('examples');
+        if (examples) examples.remove();
+        if (messageCount === 0) addSessionDivider();
+        messageCount++;
+        addMessageDirect(item.user, 'user');
+        addMessageDirect(item.assistant, 'assistant');
+    }
+
+    function clearHistory() {
+        localStorage.removeItem(HISTORY_KEY);
+        renderHistoryList();
+    }
+
+    function toggleHistory() {
+        historyVisible = !historyVisible;
+        document.getElementById('history-panel').classList.toggle('hidden', !historyVisible);
+        document.getElementById('btn-history').classList.toggle('active', historyVisible);
+        if (historyVisible) renderHistoryList();
+    }
 
     // --- Mode toggle ---
-function setMode(mode) {
+    function setMode(mode) {
         currentMode = mode;
         document.getElementById('free-input-row').style.display = mode === 'free' ? 'flex' : 'none';
         const guided = document.getElementById('guided-form');
-        if (mode === 'guided') {
-            guided.classList.add('visible');
-            updateGuidedFields();
-        } else {
-            guided.classList.remove('visible');
-        }
+        if (mode === 'guided') { guided.classList.add('visible'); updateGuidedFields(); }
+        else { guided.classList.remove('visible'); }
         document.getElementById('btn-free').classList.toggle('active', mode === 'free');
         document.getElementById('btn-guided').classList.toggle('active', mode === 'guided');
 
         const examples = document.getElementById('examples');
         if (examples) {
-            const subtitle = examples.querySelector('p');
-            const chips = examples.querySelector('.example-chips');
+            const subtitle = document.getElementById('examples-subtitle');
+            const chips = document.getElementById('example-chips');
             if (mode === 'guided') {
                 subtitle.textContent = 'Select an evaluation type and fill in the fields. The evaluator will handle the rest.';
                 chips.style.display = 'none';
@@ -469,20 +619,16 @@ function setMode(mode) {
     function buildGuidedMessage() {
         const type = document.getElementById('eval-type').value;
         const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
-
         switch (type) {
-            case 'relevance':
-                return `Check if this output is relevant to the query.\n\nQuery: ${get('f-query')}\n\nOutput: ${get('f-output')}`;
+            case 'relevance': return `Check if this output is relevant to the query.\n\nQuery: ${get('f-query')}\n\nOutput: ${get('f-output')}`;
             case 'factual':
                 const facts = get('f-facts').split('\n').filter(f => f.trim()).map(f => `- ${f}`).join('\n');
                 return `Check the factual accuracy of this output against the following known facts.\n\nKnown facts:\n${facts}\n\nOutput: ${get('f-output')}`;
             case 'rubric':
                 const criteria = get('f-criteria').split('\n').filter(c => c.trim()).map(c => `- ${c}`).join('\n');
                 return `Score this output against the rubric.\n\nTask goal: ${get('f-goal')}\n\nCriteria:\n${criteria}\n\nMinimum passing score: ${get('f-passing')}\n\nOutput: ${get('f-output')}`;
-            case 'consistency':
-                return `Check if this output contradicts itself.\n\nOutput: ${get('f-output')}`;
-            case 'compare':
-                return `Compare these two responses and tell me which is better.\n\nQuery: ${get('f-query')}\n\nResponse A: ${get('f-a')}\n\nResponse B: ${get('f-b')}`;
+            case 'consistency': return `Check if this output contradicts itself.\n\nOutput: ${get('f-output')}`;
+            case 'compare': return `Compare these two responses and tell me which is better.\n\nQuery: ${get('f-query')}\n\nResponse A: ${get('f-a')}\n\nResponse B: ${get('f-b')}`;
         }
     }
 
@@ -496,28 +642,20 @@ function setMode(mode) {
     }
 
     function newSession() {
-    if (messageCount === 0) return;
-    addSessionDivider();
-    messageCount = 0;
-}
+        if (messageCount === 0) return;
+        addSessionDivider();
+        messageCount = 0;
+    }
 
     // --- Messages ---
-    function addMessage(text, role) {
-        const examples = document.getElementById('examples');
-        if (examples) examples.remove();
-
-        if (messageCount === 0) addSessionDivider();
-        messageCount++;
-
+    function addMessageDirect(text, role) {
         const div = document.createElement('div');
         div.className = `message ${role}`;
-
         if (role === 'assistant') {
             const label = document.createElement('div');
             label.className = 'label';
             label.textContent = 'Evaluator';
             div.appendChild(label);
-
             const content = document.createElement('div');
             content.className = 'content';
             content.innerHTML = marked.parse(text);
@@ -525,9 +663,16 @@ function setMode(mode) {
         } else {
             div.textContent = text;
         }
-
         chat.appendChild(div);
         chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addMessage(text, role) {
+        const examples = document.getElementById('examples');
+        if (examples) examples.remove();
+        if (messageCount === 0) addSessionDivider();
+        messageCount++;
+        addMessageDirect(text, role);
     }
 
     function addTyping() {
@@ -544,11 +689,15 @@ function setMode(mode) {
         if (t) t.remove();
     }
 
+    function setSubmitDisabled(disabled) {
+        document.getElementById('free-submit').disabled = disabled;
+        document.getElementById('guided-submit').disabled = disabled;
+    }
+
     async function callEvaluate(message, displayText) {
         addMessage(displayText || message, 'user');
         addTyping();
         setSubmitDisabled(true);
-
         try {
             const res = await fetch('/evaluate', {
                 method: 'POST',
@@ -558,17 +707,12 @@ function setMode(mode) {
             const data = await res.json();
             removeTyping();
             addMessage(data.response, 'assistant');
+            saveToHistory(displayText || message, data.response);
         } catch (err) {
             removeTyping();
             addMessage('Something went wrong. Please try again.', 'assistant');
         }
-
         setSubmitDisabled(false);
-    }
-
-    function setSubmitDisabled(disabled) {
-        document.getElementById('free-submit').disabled = disabled;
-        document.getElementById('guided-submit').disabled = disabled;
     }
 
     // --- Free text ---
@@ -599,13 +743,7 @@ function setMode(mode) {
     function sendGuided() {
         const message = buildGuidedMessage();
         const type = document.getElementById('eval-type').value;
-        const labels = {
-            relevance: 'Relevance Check',
-            factual: 'Factual Accuracy',
-            rubric: 'Rubric Scoring',
-            consistency: 'Logical Consistency',
-            compare: 'Compare Outputs'
-        };
+        const labels = { relevance: 'Relevance Check', factual: 'Factual Accuracy', rubric: 'Rubric Scoring', consistency: 'Logical Consistency', compare: 'Compare Outputs' };
         if (!message || message.includes('undefined')) return;
         callEvaluate(message, `[${labels[type]}]`);
     }
