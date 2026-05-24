@@ -423,6 +423,20 @@
             .examples h2 { font-size: 17px; }
             .message.assistant .content table { font-size: 12px; }
         }
+
+        .share-btn {
+            margin-top: 8px;
+            background: transparent;
+            color: #444;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            height: auto;
+        }
+
+        .share-btn:hover { color: #aaa; border-color: #444; background: transparent; }
     </style>
 </head>
 <body>
@@ -683,6 +697,20 @@
             content.className = 'content';
             content.innerHTML = marked.parse(text);
             div.appendChild(content);
+
+            // Share button
+            const shareBtn = document.createElement('button');
+            shareBtn.className = 'share-btn';
+            shareBtn.textContent = 'Copy link';
+            shareBtn.onclick = () => {
+                const encoded = btoa(unescape(encodeURIComponent(text)));
+                const url = `${window.location.origin}/app#result=${encoded}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    shareBtn.textContent = 'Copied!';
+                    setTimeout(() => shareBtn.textContent = 'Copy link', 2000);
+                });
+            };
+            div.appendChild(shareBtn);
         } else {
             div.textContent = text;
         }
@@ -776,6 +804,21 @@
     // Init
     setMode('free');
     updateGuidedFields();
+
+    // Load shared result from URL hash
+    window.addEventListener('load', () => {
+        const hash = window.location.hash;
+        if (hash.startsWith('#result=')) {
+            try {
+                const encoded = hash.replace('#result=', '');
+                const text = decodeURIComponent(escape(atob(encoded)));
+                addMessage('[Shared evaluation]', 'user');
+                addMessage(text, 'assistant');
+            } catch (e) {
+                // Invalid hash, ignore
+            }
+        }
+    });
 </script>
 
 </body>
