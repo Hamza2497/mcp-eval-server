@@ -1,6 +1,6 @@
 # MCP Eval Server
 
-> **Current version: v1.0** — [Changelog](#changelog)
+> **Current version: v2.0** — [Changelog](#changelog)
 
 An LLM output evaluation tool with two ways to use it — a live web app you can try instantly, or a Claude Desktop plugin you can install locally.
 
@@ -107,7 +107,18 @@ pytest tests/ -v
 
 ## Changelog
 
-### v1.0 — 2026-05-23
+### v2.0 — 2026-05-24
+- Live web app with chat-style interface
+- Landing page with tool overview and sample evaluations
+- Guided mode with structured input fields per evaluation type
+- Evaluation history saved in browser (localStorage)
+- Shareable evaluation links via URL hash
+- Dark/light mode toggle (persisted across sessions)
+- Response time displayed under each evaluation
+- Friendly rate limit error messages
+- New session button clears screen
+
+### v1.0 — 2026-05-22
 - 5 evaluation tools: score against rubric, factual accuracy, relevance, logical consistency, compare outputs
 - Claude Desktop plugin (Claude as judge, no API key required)
 - Live web app with chat-style interface (Gemini as judge)
