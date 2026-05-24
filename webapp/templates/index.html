@@ -496,11 +496,11 @@
     <div class="header-right">
         <button id="btn-new-session" onclick="newSession()">New session</button>
         <button id="btn-history" onclick="toggleHistory()">History</button>
-        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:none; cursor:pointer; color:#666; font-size:18px; padding:0; height:auto;">☀️</button>
         <div class="toggle">
             <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
             <button id="btn-guided" onclick="setMode('guided')">Guided</button>
         </div>
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:1px solid #2a2a2a; border-radius:8px; cursor:pointer; color:#666; font-size:14px; padding:6px 10px; height:auto;">☀️</button>
     </div>
 </header>
 
@@ -878,7 +878,7 @@
         document.body.classList.add('light');
         document.getElementById('theme-toggle').textContent = '🌙';
     }
-    
+
 </script>
 
 </body>

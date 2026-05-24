@@ -31,11 +31,16 @@
         nav .logo span { color: #555; font-weight: 400; margin-left: 8px; font-size: 13px; }
 
         nav a {
-            color: #666;
+            color: #aaa;
             text-decoration: none;
             font-size: 13px;
-            transition: color 0.15s;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: color 0.15s, border-color 0.15s;
         }
+
+        nav a:hover { color: #e0e0e0; border-color: #555; }
 
         nav a:hover { color: #e0e0e0; }
 
@@ -297,8 +302,8 @@
 <nav>
     <a href="/" style="text-decoration:none;"><div class="logo">LLM Eval <span>v1.0</span></div></a>
     <div style="display:flex; align-items:center; gap:16px;">
-        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:none; cursor:pointer; color:#666; font-size:18px; padding:0; height:auto;">☀️</button>
         <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub →</a>
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:none; cursor:pointer; color:#666; font-size:18px; padding:0; height:auto;">☀️</button>
     </div>
 </nav>
 
