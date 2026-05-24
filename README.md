@@ -1,44 +1,88 @@
-# MCP Eval Server
+# mcp-eval-server
 
-> **Current version: v2.0** — [Changelog](#changelog)
+> **Structured LLM output evaluation — as an MCP plugin for Claude Desktop, and as a live web app**
 
-An LLM output evaluation tool with two ways to use it — a live web app you can try instantly, or a Claude Desktop plugin you can install locally.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-llm--eval--dmpf.onrender.com-58a6ff?style=flat&logo=render)](https://llm-eval-dmpf.onrender.com)
+[![Tests](https://img.shields.io/badge/Tests-19%20passing-brightgreen?style=flat&logo=pytest)](https://github.com/Hamza2497/mcp-eval-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**[Try the live web app →](https://llm-eval-dmpf.onrender.com)**
+Five evaluation tools for scoring, fact-checking, relevance, consistency, and output comparison — usable directly inside Claude Desktop with no API key, or via a Gemini-powered web app with no setup at all.
 
----
-
-## What it does
-
-LLM outputs are hard to evaluate at scale. This project exposes five evaluation tools that use a judge model to score outputs against rubrics, check factual accuracy, assess relevance, detect logical contradictions, and compare responses head-to-head.
-
-## Two ways to use it
-
-### 1. Web app (no setup required)
-Visit **[llm-eval-dmpf.onrender.com](https://llm-eval-dmpf.onrender.com)** and describe what you want to evaluate in plain English, or use Guided mode to fill in structured fields. Powered by Gemini.
-
-### 2. Claude Desktop plugin (local, no API key needed)
-Install the MCP server and call the evaluation tools directly from any Claude Desktop conversation. Claude itself acts as the judge — no external API key required.
+Draws on my LLM evaluation work at Invisible Technologies.
 
 ---
 
-## Tools
+## ✨ Features
 
-- **`score_against_rubric`** — Score an LLM output against a custom rubric with weighted criteria and a passing threshold
-- **`evaluate_factual_accuracy`** — Check whether an output contradicts a set of known facts
-- **`check_relevance`** — Check whether an output actually addresses the user's query
-- **`check_logical_consistency`** — Detect internal contradictions in an output
-- **`compare_outputs`** — Compare two LLM responses to the same query and determine which is better and why
+- **5 evaluation tools** — rubric scoring, factual accuracy, relevance, logical consistency, output comparison
+- **Dual-mode architecture** — install as a Claude Desktop MCP plugin (Claude acts as judge, no API key needed) or use the web app (Gemini-powered, zero setup)
+- **Chat-style web UI** — free text or guided structured input, your choice per evaluation
+- **Graduated scoring** — numeric scores with pass/fail thresholds, detailed feedback, and human-review flags
+- **Shareable links** — copy a link to any evaluation result and share it
+- **Session history** — every evaluation in the current session is logged and browsable
+- **Dark / light mode** — toggle available, preference persisted across sessions
+- **19 passing tests** — full pytest suite covering all tools and edge cases
 
 ---
 
-## Claude Desktop plugin setup
+## 🏗️ Architecture
 
-### Prerequisites
-- Python 3.12+
-- [Claude Desktop](https://claude.ai/download)
+```
+┌─────────────────────────────┐      ┌──────────────────────────────┐
+│   Claude Desktop (MCP)      │      │   Web App (Render)           │
+│   Claude acts as judge      │      │   Gemini acts as judge       │
+│   No API key needed         │      │   No setup needed            │
+└────────────┬────────────────┘      └──────────────┬───────────────┘
+             │                                       │
+             └───────────────┬───────────────────────┘
+                             ▼
+                  ┌──────────────────────┐
+                  │  FastMCP / FastAPI   │
+                  │  Python 3.12         │
+                  │  Pydantic models     │
+                  └──────────────────────┘
+```
 
-### Install
+---
+
+## 🔧 The 5 Tools
+
+| Tool | What it does |
+|------|-------------|
+| `score_against_rubric` | Score an LLM output against a custom rubric with weighted criteria and a passing threshold |
+| `evaluate_factual_accuracy` | Check whether an output contradicts or misrepresents a set of known facts |
+| `check_relevance` | Check whether an output actually addresses what the user asked |
+| `check_logical_consistency` | Detect internal contradictions within an output |
+| `compare_outputs` | Compare two LLM responses to the same query and determine which is better and why |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| MCP server | Python 3.12 · FastMCP · Pydantic |
+| Web app | FastAPI · Jinja2 · Vanilla JS |
+| AI judge (web) | Google Gemini (`gemini-2.0-flash-lite`) |
+| AI judge (MCP) | Claude (via Claude Desktop — no API key) |
+| Deployment | Render |
+| Tests | pytest · 19 passing |
+
+---
+
+## 🚀 Quick Start
+
+### Option A — Web app (no setup)
+
+→ **[llm-eval-dmpf.onrender.com](https://llm-eval-dmpf.onrender.com)**
+
+Type what you want to evaluate in plain English, or switch to Guided mode to fill in structured fields. No account, no API key.
+
+---
+
+### Option B — Claude Desktop MCP plugin
+
+**Prerequisites:** Claude Desktop, Python 3.12+
 
 ```bash
 git clone https://github.com/Hamza2497/mcp-eval-server.git
@@ -48,81 +92,68 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-### Connect to Claude Desktop
-
-Add this to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
   "mcpServers": {
     "mcp-eval-server": {
-      "command": "/path/to/mcp-eval-server/.venv/bin/python",
+      "command": "/absolute/path/to/mcp-eval-server/.venv/bin/python",
       "args": ["-m", "mcp_eval_server"]
     }
   }
 }
 ```
 
-Replace `/path/to/mcp-eval-server/` with the actual path where you cloned the repo. Restart Claude Desktop — the server will appear in your connectors list.
-
-### Example
-
-Ask Claude Desktop:
-
-> Use score_against_rubric to evaluate "A for loop lets you repeat a block of code for each item in a list." against a rubric with task goal "Explain what a for loop does", criteria: accuracy (weight 0.8) and clarity (weight 0.6), min passing score 0.7.
+Replace the path with wherever you cloned the repo. Restart Claude Desktop — the 5 eval tools will appear automatically.
 
 ---
 
-## Running the web app locally
+### Option C — Run the web app locally
 
 ```bash
 pip install -e .
 cp .env.example .env  # add your GEMINI_API_KEY
 uvicorn webapp.main:app --reload
+# → http://localhost:8000
 ```
 
-Then open `http://localhost:8000`.
-
 ---
 
-## Tech stack
-
-- [FastMCP](https://github.com/jlowin/fastmcp) — MCP server framework
-- [FastAPI](https://fastapi.tiangolo.com) + Jinja2 — web app backend
-- [Google Gemini](https://ai.google.dev) (`gemini-3.1-flash-lite`) — judge model for web app
-- Claude — judge model for the Desktop plugin (no API key needed)
-- [Pydantic](https://docs.pydantic.dev) — typed data validation
-- Python 3.12
-- Deployed on [Render](https://render.com)
-
----
-
-## Running tests
+## 🧪 Tests
 
 ```bash
 pytest tests/ -v
+# 19 passed
 ```
 
 ---
 
-## Changelog
+## 📁 Project Structure
 
-### v2.0 — 2026-05-24
-- Live web app with chat-style interface
-- Landing page with tool overview and sample evaluations
-- Guided mode with structured input fields per evaluation type
-- Evaluation history saved in browser (localStorage)
-- Shareable evaluation links via URL hash
-- Dark/light mode toggle (persisted across sessions)
-- Response time displayed under each evaluation
-- Friendly rate limit error messages
-- New session button clears screen
+```
+mcp-eval-server/
+├── src/mcp_eval_server/   # MCP server — 5 eval tools
+├── webapp/                # FastAPI web app + Jinja2 templates
+├── tests/                 # pytest suite (19 tests)
+├── pyproject.toml
+├── requirements.txt
+├── render.yaml
+└── .env.example
+```
 
-### v1.0 — 2026-05-22
-- 5 evaluation tools: score against rubric, factual accuracy, relevance, logical consistency, compare outputs
-- Claude Desktop plugin (Claude as judge, no API key required)
-- Live web app with chat-style interface (Gemini as judge)
-- Guided mode with structured input fields per evaluation type
-- Free text mode with example prompts
-- Markdown rendering, graduated scoring, session dividers
-- 19 passing tests
+---
+
+## 🌐 Deployment
+
+| Service | Platform | URL |
+|---------|----------|-----|
+| Web app | Render | [llm-eval-dmpf.onrender.com](https://llm-eval-dmpf.onrender.com) |
+
+`GEMINI_API_KEY` is set as an environment variable on Render. Everything else is in `render.yaml`.
+
+---
+
+## 👤 Author
+
+**Hamza Assaf** — [hamza2497.github.io](https://hamza2497.github.io) · [LinkedIn](https://linkedin.com/in/hamzah-assaf)
