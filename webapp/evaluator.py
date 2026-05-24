@@ -44,4 +44,7 @@ def evaluate(user_message: str) -> str:
         )
         return response.text.strip()
     except Exception as e:
-        return f"Evaluation failed: {str(e)}"
+        error = str(e)
+        if "429" in error or "RESOURCE_EXHAUSTED" in error:
+            return "The evaluator is receiving too many requests right now. Please wait a moment and try again."
+        return f"Evaluation failed: {error}"
