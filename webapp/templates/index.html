@@ -603,26 +603,26 @@
     // --- Guided fields ---
     const fields = {
         relevance: `
-            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
-            <input class="field" id="f-query" placeholder="User query the output should address...">
+            <textarea class="field" id="f-output" placeholder="e.g. Photosynthesis is the process by which plants convert sunlight into energy." rows="3"></textarea>
+            <input class="field" id="f-query" placeholder="e.g. How do plants make food?">
         `,
         factual: `
-            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
-            <textarea class="field" id="f-facts" placeholder="Known facts (one per line)..." rows="3"></textarea>
+            <textarea class="field" id="f-output" placeholder="e.g. The Earth orbits the Sun every 365 days." rows="3"></textarea>
+            <textarea class="field" id="f-facts" placeholder="e.g. The Earth orbits the Sun&#10;A full orbit takes 365.25 days&#10;The Earth has one moon" rows="3"></textarea>
         `,
         rubric: `
-            <textarea class="field" id="f-output" placeholder="LLM output to evaluate..." rows="3"></textarea>
-            <input class="field" id="f-goal" placeholder="Task goal (e.g. Explain what a for loop does)">
-            <textarea class="field" id="f-criteria" placeholder="Criteria (one per line, e.g. accuracy: Is it correct?)" rows="3"></textarea>
+            <textarea class="field" id="f-output" placeholder="e.g. A for loop repeats a block of code for each item in an iterable." rows="3"></textarea>
+            <input class="field" id="f-goal" placeholder="e.g. Explain what a for loop does in Python">
+            <textarea class="field" id="f-criteria" placeholder="e.g. accuracy: Is the explanation technically correct?&#10;clarity: Is it easy to understand?" rows="3"></textarea>
             <input class="field" id="f-passing" placeholder="Minimum passing score (e.g. 0.7)" type="number" min="0" max="1" step="0.1" value="0.7">
         `,
         consistency: `
-            <textarea class="field" id="f-output" placeholder="LLM output to check for contradictions..." rows="4"></textarea>
+            <textarea class="field" id="f-output" placeholder="e.g. All mammals are warm-blooded. Whales are mammals. Therefore whales are cold-blooded." rows="4"></textarea>
         `,
         compare: `
-            <textarea class="field" id="f-a" placeholder="Response A..." rows="3"></textarea>
-            <textarea class="field" id="f-b" placeholder="Response B..." rows="3"></textarea>
-            <input class="field" id="f-query" placeholder="The user query both responses are answering...">
+            <textarea class="field" id="f-a" placeholder="e.g. A dictionary in Python is a collection of key-value pairs. It is mutable and unordered." rows="3"></textarea>
+            <textarea class="field" id="f-b" placeholder="e.g. A dictionary stores stuff." rows="3"></textarea>
+            <input class="field" id="f-query" placeholder="e.g. What is a Python dictionary?">
         `
     };
 
