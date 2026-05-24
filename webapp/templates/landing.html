@@ -260,13 +260,46 @@
             .hero p { font-size: 15px; }
             .samples, .tools { padding-left: 20px; padding-right: 20px; }
         }
+
+        body.light {
+            background: #ffffff;
+            color: #111;
+        }
+
+        body.light nav { border-bottom-color: #e5e5e5; }
+        body.light .logo { color: #000; }
+        body.light .logo span { color: #999; }
+        body.light nav a { color: #999; }
+        body.light .badge { background: #f5f5f5; border-color: #e5e5e5; color: #999; }
+        body.light .hero h1 { color: #000; }
+        body.light .hero p { color: #666; }
+        body.light .btn-primary { background: #000; color: #fff; }
+        body.light .btn-primary:hover { background: #333; }
+        body.light .btn-secondary { color: #666; border-color: #ddd; }
+        body.light .btn-secondary:hover { border-color: #999; color: #000; }
+        body.light .sample-card { background: #f9f9f9; border-color: #e5e5e5; }
+        body.light .sample-card .type { color: #999; }
+        body.light .sample-card .query { color: #666; }
+        body.light .sample-card .score { color: #000; }
+        body.light .sample-card .feedback { color: #888; }
+        body.light .tool-item { background: #f9f9f9; border-color: #e5e5e5; }
+        body.light .tool-item .name { color: #000; }
+        body.light .tool-item .desc { color: #666; }
+        body.light .samples h2 { color: #999; }
+        body.light .tools h2 { color: #000; }
+        body.light footer { border-top-color: #e5e5e5; color: #aaa; }
+        body.light footer a { color: #999; }
     </style>
 </head>
+
 <body>
 
 <nav>
     <a href="/" style="text-decoration:none;"><div class="logo">LLM Eval <span>v1.0</span></div></a>
-    <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub →</a>
+    <div style="display:flex; align-items:center; gap:16px;">
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:none; cursor:pointer; color:#666; font-size:18px; padding:0; height:auto;">☀️</button>
+        <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub →</a>
+    </div>
 </nav>
 
 <div class="hero">
@@ -369,6 +402,19 @@
     Built by <a href="https://github.com/Hamza2497" target="_blank">Hamzah</a> ·
     <a href="https://github.com/Hamza2497/mcp-eval-server" target="_blank">GitHub</a>
 </footer>
+
+<script>
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('llmeval_theme', isLight ? 'light' : 'dark');
+        document.getElementById('theme-toggle').textContent = isLight ? '🌙' : '☀️';
+    }
+
+    if (localStorage.getItem('llmeval_theme') === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('theme-toggle').textContent = '🌙';
+    }
+</script>
 
 </body>
 </html>

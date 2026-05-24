@@ -437,6 +437,53 @@
         }
 
         .share-btn:hover { color: #aaa; border-color: #444; background: transparent; }
+
+        body.light {
+            background: #fff;
+            color: #111;
+        }
+
+        body.light header { border-bottom-color: #e5e5e5; }
+        body.light header h1 { color: #000; }
+        body.light header span { color: #999; }
+        body.light .toggle { background: #f5f5f5; border-color: #e5e5e5; }
+        body.light .toggle button { color: #999; }
+        body.light .toggle button.active { background: #e5e5e5; color: #000; }
+        body.light #btn-new-session { color: #999; border-color: #e5e5e5; }
+        body.light #btn-history { color: #999; border-color: #e5e5e5; }
+        body.light #btn-history.active { background: #f5f5f5; color: #000; }
+        body.light #history-panel { border-right-color: #e5e5e5; }
+        body.light .history-header { border-bottom-color: #e5e5e5; color: #999; }
+        body.light .history-item:hover { background: #f5f5f5; }
+        body.light .history-item .h-preview { color: #555; }
+        body.light .history-item .h-time { color: #aaa; }
+        body.light #chat { background: #fff; }
+        body.light .message.user { background: #f5f5f5; border-color: #e5e5e5; color: #111; }
+        body.light .message.assistant .label { color: #aaa; }
+        body.light .message.assistant .content { color: #111; }
+        body.light .message.assistant .content h1,
+        body.light .message.assistant .content h2,
+        body.light .message.assistant .content h3 { color: #000; }
+        body.light .message.assistant .content th { background: #f5f5f5; color: #666; }
+        body.light .message.assistant .content th,
+        body.light .message.assistant .content td { border-color: #e5e5e5; }
+        body.light .message.assistant .content code { background: #f5f5f5; }
+        body.light .message.assistant .content strong { color: #000; }
+        body.light .session-divider { color: #ccc; }
+        body.light .session-divider::before,
+        body.light .session-divider::after { border-top-color: #e5e5e5; }
+        body.light #input-area { background: #fff; border-top-color: #e5e5e5; }
+        body.light #input { background: #f5f5f5; border-color: #e5e5e5; color: #111; }
+        body.light #input::placeholder { color: #bbb; }
+        body.light select, body.light textarea.field, body.light input.field { background: #f5f5f5; border-color: #e5e5e5; color: #111; }
+        body.light .chip { background: #f5f5f5; border-color: #e5e5e5; color: #666; }
+        body.light .chip:hover { border-color: #999; color: #000; }
+        body.light .examples h2 { color: #000; }
+        body.light .examples p { color: #999; }
+        body.light .share-btn { color: #aaa; border-color: #e5e5e5; }
+        body.light .share-btn:hover { color: #666; border-color: #ccc; }
+        body.light #free-submit, body.light button.submit { background: #000; color: #fff; }
+        body.light #free-submit:hover, body.light button.submit:hover { background: #333; }
     </style>
 </head>
 <body>
@@ -449,6 +496,7 @@
     <div class="header-right">
         <button id="btn-new-session" onclick="newSession()">New session</button>
         <button id="btn-history" onclick="toggleHistory()">History</button>
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:transparent; border:none; cursor:pointer; color:#666; font-size:18px; padding:0; height:auto;">☀️</button>
         <div class="toggle">
             <button id="btn-free" class="active" onclick="setMode('free')">Free text</button>
             <button id="btn-guided" onclick="setMode('guided')">Guided</button>
@@ -819,6 +867,18 @@
             }
         }
     });
+
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('llmeval_theme', isLight ? 'light' : 'dark');
+        document.getElementById('theme-toggle').textContent = isLight ? '🌙' : '☀️';
+    }
+
+    if (localStorage.getItem('llmeval_theme') === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('theme-toggle').textContent = '🌙';
+    }
+    
 </script>
 
 </body>
